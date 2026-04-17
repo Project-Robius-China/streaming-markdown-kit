@@ -1,0 +1,35 @@
+[package]
+name = "streaming-markdown-kit"
+version = "0.1.0"
+edition = "2024"
+description = "Drop-in streaming-markdown helpers for Makepad 2.0 apps: sanitizer, blink cursor, CJK-capable code font — no upstream Makepad changes required."
+license = "MIT OR Apache-2.0"
+readme = "README.md"
+# The bundled LXGW Wen Kai TTF pushes this crate to ~18 MB; keep things that
+# aren't needed out of the package.
+exclude = [".DS_Store"]
+
+[dependencies]
+streaming-markdown-sanitizer = { path = "../streaming-markdown-sanitizer", version = "0.1" }
+anyhow = { version = "1", optional = true }
+rusty-mermaid = { path = "../robius/rusty-mermaid/crates/rusty-mermaid", default-features = false, features = ["svg"], optional = true }
+usvg = { version = "0.46", optional = true }
+resvg = { version = "0.46", optional = true }
+
+[dev-dependencies]
+# Used by tests/probe_svg.rs to round-trip rusty-mermaid output through
+# Makepad's SVG parser for diagnostics.
+makepad-svg = { path = "../robius/makepad/libs/svg" }
+
+[features]
+default = []
+# Opt-in: diagram rendering for ```mermaid code blocks. Uses rusty-mermaid
+# (25 diagram types, dagre layout, 1793-test coverage) for SVG + usvg/resvg
+# for rasterisation. Pulls in ~90 transitive crates.
+mermaid = ["dep:anyhow", "dep:rusty-mermaid", "dep:usvg", "dep:resvg"]
+
+[lib]
+path = "src/lib.rs"
+
+[lints.clippy]
+all = "warn"
