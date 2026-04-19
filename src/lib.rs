@@ -3,8 +3,8 @@
 //! This crate contains three things you need to render LLM output live in a
 //! Makepad `Markdown` widget without flicker:
 //!
-//! 1. A re-export of [`streaming_markdown_sanitizer`] (structural trimming of
-//!    half-finished code fences, `$$` pairs, and tables).
+//! 1. A [`sanitizer`] module (structural trimming of half-finished code fences,
+//!    `$$` pairs, and tables) — originally a separate crate, now bundled here.
 //! 2. The [`streaming_display`] helper that formats one frame's body: sanitise,
 //!    then append a cursor glyph that rides Makepad's built-in `animated_chars`
 //!    fade window.
@@ -45,8 +45,8 @@ pub const DEFAULT_TAIL: char = '▋';
 /// 2. Append [`DEFAULT_TAIL`] so the last character is always inside Makepad's
 ///    fade-in window while streaming is active.
 ///
-/// Call [`streaming_markdown_sanitizer::sanitize_streaming_markdown`] directly
-/// if you want to skip the cursor glyph.
+/// Call [`sanitizer::sanitize_streaming_markdown`] directly if you want to
+/// skip the cursor glyph.
 #[must_use]
 pub fn streaming_display(raw: &str, opts: SanitizeOptions) -> String {
     let safe = sanitize_streaming_markdown_with(raw, opts);
