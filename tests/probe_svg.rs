@@ -1,6 +1,29 @@
 #![cfg(feature = "mermaid")]
 
 #[test]
+fn probe_state_diagram_renders() {
+    let src = r#"stateDiagram-v2
+    [*] --> 待支付: 创建订单
+    待支付 --> 已取消: 超时
+    待支付 --> 已支付: 支付成功
+    已支付 --> [*]: 完成"#;
+    match streaming_markdown_kit::render_mermaid_to_svg(src) {
+        Ok(svg) => {
+            eprintln!("[state] SVG length: {}", svg.len());
+            let rect_count = svg.matches("<rect").count();
+            let text_count = svg.matches("<text").count();
+            let path_count = svg.matches("<path").count();
+            eprintln!(
+                "  <rect>={rect_count}, <text>={text_count}, <path>={path_count}"
+            );
+            // If SVG is < ~500 bytes it's probably just the empty <svg> shell.
+            eprintln!("  non-empty render? {}", svg.len() > 500);
+        }
+        Err(e) => eprintln!("[state] render FAILED: {e:?}"),
+    }
+}
+
+#[test]
 fn probe_sequence_note_cjk_mojibake() {
     // User reports mojibake inside a yellow-framed Note node in a sequence
     // diagram (note over X). Sequence `Note` rendering is a suspect because

@@ -20,10 +20,12 @@
 pub mod latex_wrap;
 #[cfg(feature = "mermaid")]
 pub mod mermaid;
+pub mod remend;
 
 pub use latex_wrap::wrap_bare_latex;
 #[cfg(feature = "mermaid")]
 pub use mermaid::{RenderedMermaid, render_mermaid_to_png, render_mermaid_to_svg};
+pub use remend::remend;
 pub use streaming_markdown_sanitizer::{
     SanitizeOptions, sanitize_streaming_markdown, sanitize_streaming_markdown_with,
 };
@@ -57,6 +59,24 @@ pub fn streaming_display(raw: &str, opts: SanitizeOptions) -> String {
 #[must_use]
 pub fn streaming_display_default(raw: &str) -> String {
     streaming_display(raw, SanitizeOptions::default())
+}
+
+/// Like [`streaming_display_with_latex_autowrap`] but runs [`remend::remend`]
+/// between the sanitizer and the cursor append. The extra step detects
+/// markdown constructs left syntactically open at the tail of the streaming
+/// buffer (unclosed `**`, backticks, fenced code, link, math) and appends
+/// the speculative closers, so the downstream parser doesn't have to
+/// tolerant-recover on every token boundary — which was the root cause of
+/// chat-UI flicker with Kimi / DeepSeek / Qwen / Llama output.
+#[must_use]
+pub fn streaming_display_with_latex_autowrap_remend(raw: &str, opts: SanitizeOptions) -> String {
+    let wrapped = wrap_bare_latex(raw);
+    let safe = sanitize_streaming_markdown_with(&wrapped, opts);
+    let closed = remend::remend(&safe);
+    let mut out = String::with_capacity(closed.len() + DEFAULT_TAIL.len_utf8());
+    out.push_str(&closed);
+    out.push(DEFAULT_TAIL);
+    out
 }
 
 /// Like [`streaming_display`] but first runs [`wrap_bare_latex`] on the input.
