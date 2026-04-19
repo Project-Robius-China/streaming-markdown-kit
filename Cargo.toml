@@ -10,7 +10,6 @@ readme = "README.md"
 exclude = [".DS_Store"]
 
 [dependencies]
-streaming-markdown-sanitizer = { path = "../streaming-markdown-sanitizer", version = "0.1" }
 anyhow = { version = "1", optional = true }
 rusty-mermaid = { path = "../robius/rusty-mermaid/crates/rusty-mermaid", default-features = false, features = ["svg"], optional = true }
 usvg = { version = "0.46", optional = true }
@@ -20,6 +19,8 @@ resvg = { version = "0.46", optional = true }
 # Used by tests/probe_svg.rs to round-trip rusty-mermaid output through
 # Makepad's SVG parser for diagnostics.
 makepad-svg = { path = "../robius/makepad/libs/svg" }
+# Sanitizer integration + pulldown round-trip tests live in `tests/sanitizer*.rs`.
+pulldown-cmark = { version = "0.13", default-features = false }
 
 [features]
 default = []

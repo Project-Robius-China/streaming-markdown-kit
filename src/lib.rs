@@ -21,12 +21,13 @@ pub mod latex_wrap;
 #[cfg(feature = "mermaid")]
 pub mod mermaid;
 pub mod remend;
+pub mod sanitizer;
 
 pub use latex_wrap::wrap_bare_latex;
 #[cfg(feature = "mermaid")]
 pub use mermaid::{RenderedMermaid, render_mermaid_to_png, render_mermaid_to_svg};
 pub use remend::remend;
-pub use streaming_markdown_sanitizer::{
+pub use sanitizer::{
     SanitizeOptions, sanitize_streaming_markdown, sanitize_streaming_markdown_with,
 };
 
