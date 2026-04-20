@@ -110,6 +110,26 @@ frequently emit `![alt](/path/to/file.png)` and it renders as a useless
   by a separate future `M-mobile-*` spec.
 - DeepSeek thinking-block images (same as issue 003 gap).
 
+## SVG support
+
+Status: covered by M-img-3 (see widgets/src/markdown.rs, 2026-04 onward).
+SVG rendering uses Makepad's native `makepad_svg::parse::parse_svg` +
+`DrawSvg::render_to_rect` stack — zero external deps, no rasterization
+crate. Works for local paths, `file://` URLs, data URLs
+(`data:image/svg+xml;base64,...`), and HTTP(S) URLs through the same
+`decode_and_cache_bytes` dispatch that handles PNG/JPEG/WebP. SVG bytes
+up to 4 MiB are accepted; larger inputs are rejected with a `log::warn!`
+and render the `🖼` placeholder. Malformed XML / non-UTF-8 / empty-root
+outcomes fall back to the same placeholder path. Cache accounting
+charges raw source bytes (not parsed-AST memory). Known limitations
+(v1): SVG animations (`<animate>`, `<animateTransform>`) render as the
+t=0 frozen frame — the `InlineSvg` widget does not drive `next_frame`;
+no CSS stylesheets (`<style>` content ignored); no external image
+references (`<image xlink:href="...">`); no `<text>`-on-path; no
+scripting; no filters beyond a single feGaussianBlur/feOffset/feFlood
+drop-shadow assembled at parse time. See `libs/svg/` source and
+`examples/vector/` for the coverage baseline.
+
 ## Completion Criteria
 
 Scenario: Local absolute PNG path renders the decoded image
