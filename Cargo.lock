@@ -375,6 +375,7 @@ dependencies = [
 [[package]]
 name = "rusty-mermaid"
 version = "0.2.0"
+source = "git+https://github.com/ZhangHanDong/rusty-mermaid.git#68a429b0472d57bce992c7bdddb59aa0c967e2f8"
 dependencies = [
  "rusty-mermaid-core",
  "rusty-mermaid-diagrams",
@@ -384,10 +385,12 @@ dependencies = [
 [[package]]
 name = "rusty-mermaid-core"
 version = "0.2.0"
+source = "git+https://github.com/ZhangHanDong/rusty-mermaid.git#68a429b0472d57bce992c7bdddb59aa0c967e2f8"
 
 [[package]]
 name = "rusty-mermaid-dagre"
 version = "0.2.0"
+source = "git+https://github.com/ZhangHanDong/rusty-mermaid.git#68a429b0472d57bce992c7bdddb59aa0c967e2f8"
 dependencies = [
  "rusty-mermaid-core",
  "rusty-mermaid-graph",
@@ -396,6 +399,7 @@ dependencies = [
 [[package]]
 name = "rusty-mermaid-diagrams"
 version = "0.2.0"
+source = "git+https://github.com/ZhangHanDong/rusty-mermaid.git#68a429b0472d57bce992c7bdddb59aa0c967e2f8"
 dependencies = [
  "rusty-mermaid-core",
  "rusty-mermaid-dagre",
@@ -407,6 +411,7 @@ dependencies = [
 [[package]]
 name = "rusty-mermaid-graph"
 version = "0.2.0"
+source = "git+https://github.com/ZhangHanDong/rusty-mermaid.git#68a429b0472d57bce992c7bdddb59aa0c967e2f8"
 dependencies = [
  "rusty-mermaid-core",
 ]
@@ -414,6 +419,7 @@ dependencies = [
 [[package]]
 name = "rusty-mermaid-svg"
 version = "0.2.0"
+source = "git+https://github.com/ZhangHanDong/rusty-mermaid.git#68a429b0472d57bce992c7bdddb59aa0c967e2f8"
 dependencies = [
  "rusty-mermaid-core",
 ]

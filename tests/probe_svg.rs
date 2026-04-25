@@ -13,9 +13,7 @@ fn probe_state_diagram_renders() {
             let rect_count = svg.matches("<rect").count();
             let text_count = svg.matches("<text").count();
             let path_count = svg.matches("<path").count();
-            eprintln!(
-                "  <rect>={rect_count}, <text>={text_count}, <path>={path_count}"
-            );
+            eprintln!("  <rect>={rect_count}, <text>={text_count}, <path>={path_count}");
             // If SVG is < ~500 bytes it's probably just the empty <svg> shell.
             eprintln!("  non-empty render? {}", svg.len() > 500);
         }
@@ -63,7 +61,10 @@ fn probe_cylinder_with_ascii_label_mojibake() {
     for (i, m) in svg.match_indices("<text").take(6).enumerate() {
         let tail = &svg[m.0..];
         let end = tail.find("</text>").map(|e| e + 7).unwrap_or(200);
-        eprintln!("  <text> #{i}: {}", &tail[..end.min(500)].replace('\n', " "));
+        eprintln!(
+            "  <text> #{i}: {}",
+            &tail[..end.min(500)].replace('\n', " ")
+        );
     }
 }
 
@@ -77,7 +78,10 @@ fn probe_ampersand_multi_edge() {
     // 5 nodes + bg rect = 6; at least 4 edges (A→C, B→C, C→D, C→E) =
     // 4 <path> + 1 marker <path>
     eprintln!("  rects: {rect_count}, paths: {path_count}");
-    assert!(svg.contains(">A<") && svg.contains(">E<"), "all five node labels should render");
+    assert!(
+        svg.contains(">A<") && svg.contains(">E<"),
+        "all five node labels should render"
+    );
 }
 
 #[test]
@@ -113,11 +117,18 @@ fn probe_br_layout_detail() {
     let svg = streaming_markdown_kit::render_mermaid_to_svg(src).expect("render");
     eprintln!("[<br/> detail] SVG:\n{svg}\n");
     // Find A's rect size.
-    let rects: Vec<&str> = svg.match_indices("<rect").map(|(i, _)| {
-        let tail = &svg[i..];
-        let end = tail.find("/>").or(tail.find(">")).map(|e| e+2).unwrap_or(120);
-        &tail[..end.min(250)]
-    }).collect();
+    let rects: Vec<&str> = svg
+        .match_indices("<rect")
+        .map(|(i, _)| {
+            let tail = &svg[i..];
+            let end = tail
+                .find("/>")
+                .or(tail.find(">"))
+                .map(|e| e + 2)
+                .unwrap_or(120);
+            &tail[..end.min(250)]
+        })
+        .collect();
     eprintln!("[<br/> detail] rects found: {}", rects.len());
     for (i, r) in rects.iter().enumerate() {
         eprintln!("  rect #{i}: {r}");
@@ -141,7 +152,10 @@ fn probe_cylinder_and_double_paren_quotes() {
             for (i, chunk) in svg.match_indices("<text").take(6).enumerate() {
                 let start = chunk.0;
                 let tail = &svg[start..];
-                let end_rel = tail.find("</text>").map(|e| e + "</text>".len()).unwrap_or(200);
+                let end_rel = tail
+                    .find("</text>")
+                    .map(|e| e + "</text>".len())
+                    .unwrap_or(200);
                 let t = &tail[..end_rel.min(300)];
                 let inner_start = t.find('>').map(|p| p + 1).unwrap_or(0);
                 let inner_end = t.find("</text>").unwrap_or(t.len());
@@ -170,8 +184,14 @@ fn probe_quoted_label_stripping() {
     for (i, chunk) in svg.match_indices("<text").take(4).enumerate() {
         let start = chunk.0;
         let tail = &svg[start..];
-        let end_rel = tail.find("</text>").map(|e| e + "</text>".len()).unwrap_or(200);
-        eprintln!("  text #{i}: {}", &tail[..end_rel.min(300)].replace('\n', " "));
+        let end_rel = tail
+            .find("</text>")
+            .map(|e| e + "</text>".len())
+            .unwrap_or(200);
+        eprintln!(
+            "  text #{i}: {}",
+            &tail[..end_rel.min(300)].replace('\n', " ")
+        );
     }
 }
 
@@ -192,7 +212,14 @@ fn probe_classdef_support() {
             let has_violet = svg.contains("#a78bfa") || svg.contains("a78bfa");
             eprintln!("  -> cyan #22d3ee present? {has_cyan}");
             eprintln!("  -> violet #a78bfa present? {has_violet}");
-            eprintln!("  -> {}", if has_cyan && has_violet { "classDef SUPPORTED" } else { "classDef NOT honoured" });
+            eprintln!(
+                "  -> {}",
+                if has_cyan && has_violet {
+                    "classDef SUPPORTED"
+                } else {
+                    "classDef NOT honoured"
+                }
+            );
         }
         Err(e) => eprintln!("[classDef] render FAILED: {e:?}"),
     }

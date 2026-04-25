@@ -12,7 +12,9 @@ use std::borrow::Cow;
 /// Info-strings whose fenced content is held opaque — inline rules
 /// (emphasis, inline code, math, strike) are bypassed inside these blocks.
 /// Only the fenced-code closer rule applies.
-const BYPASS_LANGUAGES: &[&str] = &["mermaid", "math", "tex", "latex", "typst", "asciidoc"];
+const BYPASS_LANGUAGES: &[&str] = &[
+    "mermaid", "diagram", "math", "tex", "latex", "typst", "asciidoc",
+];
 
 /// Primary entry point. Takes any `&str`, returns the same string if it is
 /// already well-formed, or an `Owned` copy with a speculative closer
@@ -43,7 +45,11 @@ impl ScanState {
     fn in_bypass_language(&self) -> bool {
         self.open_fence
             .as_ref()
-            .map(|f| BYPASS_LANGUAGES.iter().any(|b| b.eq_ignore_ascii_case(&f.info)))
+            .map(|f| {
+                BYPASS_LANGUAGES
+                    .iter()
+                    .any(|b| b.eq_ignore_ascii_case(&f.info))
+            })
             .unwrap_or(false)
     }
 }
@@ -467,7 +473,8 @@ fn close_inline_code(tail: &str) -> Option<String> {
     // Count the total number of runs of this exact length earlier.
     // If even, the last run is an opener (unclosed). If odd (this run is the
     // match of an earlier opener), it's closed.
-    let earlier_count = count_backtick_runs_of_len(tail.get(..last_start).unwrap_or(""), last_run_len);
+    let earlier_count =
+        count_backtick_runs_of_len(tail.get(..last_start).unwrap_or(""), last_run_len);
     if earlier_count.is_multiple_of(2) {
         // Last run is an opener — synthesise closer.
         Some("`".repeat(last_run_len))
@@ -607,5 +614,12 @@ mod unit_tests {
         // tail_start should be after "prose\n\n" (7 bytes), NOT after the
         // later `\n\n` inside the open fence.
         assert_eq!(s.tail_start, "prose\n\n".len());
+    }
+
+    #[test]
+    fn diagram_fence_is_bypass_language() {
+        let s = scan("```diagram\n{\"type\":\"state\",\"states\":[{\"id\":\"a\"}]");
+        assert!(s.open_fence.is_some());
+        assert!(s.in_bypass_language());
     }
 }

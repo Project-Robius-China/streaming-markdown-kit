@@ -73,10 +73,7 @@ fn assert_every_sanitized_step_balanced(full: &str) {
         }
         let sanitized = san(&full[..end]);
         let events = parse(&sanitized);
-        assert_balanced(
-            &events,
-            &format!("at char {end} of {}", full.len()),
-        );
+        assert_balanced(&events, &format!("at char {end} of {}", full.len()));
     }
 }
 
@@ -136,21 +133,25 @@ fn control_raw_streaming_flips_last_block_kind() {
             continue;
         }
         let events = parse(&full[..end]);
-        let kind = events.iter().rev().find_map(|e| match e {
-            Event::Start(Tag::Paragraph) => Some(LastStart::Paragraph),
-            Event::Start(Tag::CodeBlock(k)) => Some(LastStart::CodeBlock(format!("{k:?}"))),
-            Event::Start(Tag::Table(_)) => Some(LastStart::Table),
-            Event::Start(other) => {
-                let name: &'static str = match other {
-                    Tag::Heading { .. } => "Heading",
-                    Tag::List(_) => "List",
-                    Tag::Item => "Item",
-                    _ => "Other",
-                };
-                Some(LastStart::Other(name))
-            }
-            _ => None,
-        }).unwrap_or(LastStart::None);
+        let kind = events
+            .iter()
+            .rev()
+            .find_map(|e| match e {
+                Event::Start(Tag::Paragraph) => Some(LastStart::Paragraph),
+                Event::Start(Tag::CodeBlock(k)) => Some(LastStart::CodeBlock(format!("{k:?}"))),
+                Event::Start(Tag::Table(_)) => Some(LastStart::Table),
+                Event::Start(other) => {
+                    let name: &'static str = match other {
+                        Tag::Heading { .. } => "Heading",
+                        Tag::List(_) => "List",
+                        Tag::Item => "Item",
+                        _ => "Other",
+                    };
+                    Some(LastStart::Other(name))
+                }
+                _ => None,
+            })
+            .unwrap_or(LastStart::None);
 
         if let Some(prev) = &last_kind_seen
             && *prev != kind

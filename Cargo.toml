@@ -11,7 +11,7 @@ exclude = [".DS_Store"]
 
 [dependencies]
 anyhow = { version = "1", optional = true }
-rusty-mermaid = { path = "../robius/rusty-mermaid/crates/rusty-mermaid", default-features = false, features = ["svg"], optional = true }
+rusty-mermaid = { git = "https://github.com/ZhangHanDong/rusty-mermaid.git", default-features = false, features = ["svg"], optional = true }
 usvg = { version = "0.46", optional = true }
 resvg = { version = "0.46", optional = true }
 

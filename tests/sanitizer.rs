@@ -188,7 +188,10 @@ fn pipe_line_inside_unclosed_fence_is_not_a_table() {
     };
     let s = "```rust\nfn f(x: Option<i32>) {\n\n    match x { | Some(a) | Some(b) => {} }\n    println!(\"| {} | {} |\", 1, 2);";
     let out = streaming_markdown_kit::sanitize_streaming_markdown_with(s, opts);
-    assert_eq!(&*out, s, "content inside an unclosed fence must not be trimmed by table detection");
+    assert_eq!(
+        &*out, s,
+        "content inside an unclosed fence must not be trimmed by table detection"
+    );
 }
 
 #[test]
@@ -280,7 +283,10 @@ fn simulate_streaming_chunks() {
     }
     // We expect at least one shrink: when the opening ``` arrives, the tail
     // is dropped until the closing ``` does.
-    assert!(saw_shrink >= 1, "expected to see sanitizer trim when fence opens mid-stream");
+    assert!(
+        saw_shrink >= 1,
+        "expected to see sanitizer trim when fence opens mid-stream"
+    );
 }
 
 #[test]

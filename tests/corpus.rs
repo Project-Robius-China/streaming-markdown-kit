@@ -145,14 +145,18 @@ fn assert_properties(file: &str, prefix: &str) {
 #[test]
 fn idempotent_on_all_prefixes() {
     let corpus = load_corpus();
-    assert!(!corpus.is_empty(), "corpus directory is empty — expected seed files");
+    assert!(
+        !corpus.is_empty(),
+        "corpus directory is empty — expected seed files"
+    );
     let mut total_prefixes = 0usize;
     for (name, content) in &corpus {
         for prefix in sample_prefixes(content) {
             let once = remend(prefix);
             let twice = remend(&once);
             assert_eq!(
-                *twice, *once,
+                *twice,
+                *once,
                 "idempotency failed for {name} @ {}",
                 prefix.len()
             );
@@ -174,7 +178,10 @@ fn idempotent_on_all_prefixes() {
 #[test]
 fn prefix_preservation_on_all_samples() {
     let corpus = load_corpus();
-    assert!(!corpus.is_empty(), "corpus directory is empty — expected seed files");
+    assert!(
+        !corpus.is_empty(),
+        "corpus directory is empty — expected seed files"
+    );
     let mut total_prefixes = 0usize;
     for (name, content) in &corpus {
         for prefix in sample_prefixes(content) {

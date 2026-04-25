@@ -148,7 +148,11 @@ fn opening_fence(line: &str) -> Option<(u8, usize)> {
         return None;
     }
     let count = rest.iter().take_while(|&&b| b == first).count();
-    if count >= 3 { Some((first, count)) } else { None }
+    if count >= 3 {
+        Some((first, count))
+    } else {
+        None
+    }
 }
 
 /// A closing fence: same character, length >= opening length, and nothing but
@@ -270,9 +274,6 @@ fn is_valid_separator(s: &str) -> bool {
     if cols.is_empty() {
         return false;
     }
-    cols.iter().all(|c| {
-        !c.is_empty()
-            && c.contains('-')
-            && c.chars().all(|ch| matches!(ch, '-' | ':'))
-    })
+    cols.iter()
+        .all(|c| !c.is_empty() && c.contains('-') && c.chars().all(|ch| matches!(ch, '-' | ':')))
 }

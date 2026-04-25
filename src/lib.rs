@@ -17,12 +17,14 @@
 
 #![warn(clippy::all)]
 
+pub mod fences;
 pub mod latex_wrap;
 #[cfg(feature = "mermaid")]
 pub mod mermaid;
 pub mod remend;
 pub mod sanitizer;
 
+pub use fences::{FenceScanError, FencedCodeBlock, scan_fenced_code_blocks};
 pub use latex_wrap::wrap_bare_latex;
 #[cfg(feature = "mermaid")]
 pub use mermaid::{RenderedMermaid, render_mermaid_to_png, render_mermaid_to_svg};

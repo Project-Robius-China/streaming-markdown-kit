@@ -145,7 +145,11 @@ fn fence_run(bytes: &[u8]) -> Option<(u8, usize)> {
         return None;
     }
     let count = bytes.iter().take_while(|&&b| b == first).count();
-    if count >= 3 { Some((first, count)) } else { None }
+    if count >= 3 {
+        Some((first, count))
+    } else {
+        None
+    }
 }
 
 fn advance_to_eol(bytes: &[u8], from: usize) -> usize {
@@ -274,10 +278,7 @@ mod tests {
     fn multiple_separated_commands() {
         // Trailing `.` acts as a terminator so the streaming-safe wrapper
         // knows the final command is complete.
-        assert_eq!(
-            w("\\alpha + \\beta."),
-            "$\\alpha$ + $\\beta$.",
-        );
+        assert_eq!(w("\\alpha + \\beta."), "$\\alpha$ + $\\beta$.",);
     }
 
     #[test]
@@ -285,18 +286,12 @@ mod tests {
         // Streaming-safety promise: the final `\beta` has no terminator yet,
         // so it stays bare until the next chunk proves it's complete. The
         // first `\alpha` is followed by a space, so it wraps.
-        assert_eq!(
-            &*wrap_bare_latex("\\alpha + \\beta"),
-            "$\\alpha$ + \\beta",
-        );
+        assert_eq!(&*wrap_bare_latex("\\alpha + \\beta"), "$\\alpha$ + \\beta",);
     }
 
     #[test]
     fn command_inside_prose() {
-        assert_eq!(
-            w("因此 \\frac{a}{b} 成立"),
-            "因此 $\\frac{a}{b}$ 成立",
-        );
+        assert_eq!(w("因此 \\frac{a}{b} 成立"), "因此 $\\frac{a}{b}$ 成立",);
     }
 
     #[test]
@@ -326,10 +321,7 @@ mod tests {
 
     #[test]
     fn mixed_wrapped_and_bare() {
-        assert_eq!(
-            w("$\\alpha$ and \\beta."),
-            "$\\alpha$ and $\\beta$.",
-        );
+        assert_eq!(w("$\\alpha$ and \\beta."), "$\\alpha$ and $\\beta$.",);
     }
 
     #[test]
@@ -354,10 +346,7 @@ mod tests {
 
     #[test]
     fn unclosed_brace_left_alone() {
-        assert_eq!(
-            &*wrap_bare_latex("\\frac{1}{2"),
-            "\\frac{1}{2",
-        );
+        assert_eq!(&*wrap_bare_latex("\\frac{1}{2"), "\\frac{1}{2",);
     }
 
     #[test]
@@ -369,14 +358,14 @@ mod tests {
     #[test]
     fn progressive_streaming_becomes_wrapped_when_group_closes() {
         let partials = [
-            "\\fra",                // bail
-            "\\frac",               // still bare, no group
-            "\\frac{",              // unclosed
-            "\\frac{1",             // unclosed
-            "\\frac{1}",            // one group closed, wrap
-            "\\frac{1}{",           // second group unclosed
+            "\\fra",      // bail
+            "\\frac",     // still bare, no group
+            "\\frac{",    // unclosed
+            "\\frac{1",   // unclosed
+            "\\frac{1}",  // one group closed, wrap
+            "\\frac{1}{", // second group unclosed
             "\\frac{1}{2",
-            "\\frac{1}{2}",         // both groups closed
+            "\\frac{1}{2}", // both groups closed
         ];
         let expected = [
             "\\fra",
@@ -397,10 +386,7 @@ mod tests {
 
     #[test]
     fn chinese_before_command() {
-        assert_eq!(
-            w("设 \\mathbb{Z} 为整数集"),
-            "设 $\\mathbb{Z}$ 为整数集",
-        );
+        assert_eq!(w("设 \\mathbb{Z} 为整数集"), "设 $\\mathbb{Z}$ 为整数集",);
     }
 
     #[test]

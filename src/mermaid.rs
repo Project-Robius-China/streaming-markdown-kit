@@ -66,8 +66,8 @@ pub fn render_mermaid_to_png(source: &str) -> anyhow::Result<RenderedMermaid> {
     // when glyph shaping still can't find a requested face.
     opts.font_family = "Helvetica Neue".to_string();
     opts.fontdb_mut().load_system_fonts();
-    let tree = usvg::Tree::from_str(&svg, &opts)
-        .map_err(|e| anyhow::anyhow!("usvg parse failed: {e}"))?;
+    let tree =
+        usvg::Tree::from_str(&svg, &opts).map_err(|e| anyhow::anyhow!("usvg parse failed: {e}"))?;
 
     let size = tree.size().to_int_size();
     let (w, h) = (size.width(), size.height());

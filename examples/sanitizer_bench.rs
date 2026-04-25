@@ -10,7 +10,9 @@ fn make_doc(n_blocks: usize) -> String {
     let mut s = String::with_capacity(n_blocks * 200);
     for i in 0..n_blocks {
         match i % 4 {
-            0 => s.push_str(&format!("# Heading {i}\n\nSome prose with **bold** and *italic*.\n\n")),
+            0 => s.push_str(&format!(
+                "# Heading {i}\n\nSome prose with **bold** and *italic*.\n\n"
+            )),
             1 => s.push_str("```rust\nfn main() { println!(\"{}\", 42); }\n```\n\n"),
             2 => s.push_str("$$\n\\sum_{i=0}^{n} x_i^2 = y\n$$\n\n"),
             _ => s.push_str("| a | b | c |\n| - | - | - |\n| 1 | 2 | 3 |\n| 4 | 5 | 6 |\n\n"),

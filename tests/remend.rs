@@ -80,6 +80,23 @@ fn test_remend_protects_mermaid_block_content() {
     assert_eq!(out, expected);
 }
 
+#[test]
+fn test_remend_protects_diagram_block_content() {
+    let src = "```diagram\n{\"type\":\"state\",\"states\":[{\"id\":\"a\",\"label\":\"**Draft\"}]}";
+    let out = remend(src);
+    assert!(
+        out.ends_with("\n```"),
+        "expected fenced-code closer at end, got {:?}",
+        out.as_ref()
+    );
+    assert!(
+        out.contains("\"label\":\"**Draft\""),
+        "diagram JSON payload should be passed through unchanged"
+    );
+    let expected = format!("{src}\n```");
+    assert_eq!(out, expected);
+}
+
 // --- 9. Triple emphasis takes priority over double and single ---
 #[test]
 fn test_remend_triple_emphasis_priority() {
@@ -192,7 +209,10 @@ fn test_remend_never_synthesises_html_closer() {
 fn test_remend_prefix_preservation_fence_interior_nn_not_boundary() {
     let src = "prose\n\n```rust\nfn a() {}\n\nfn b() {";
     let out = remend(src);
-    assert!(out.ends_with("\n```"), "expected fenced closer, got {out:?}");
+    assert!(
+        out.ends_with("\n```"),
+        "expected fenced closer, got {out:?}"
+    );
     // The byte range [0, len("prose\n\n")) is preserved.
     let prefix_len = "prose\n\n".len();
     assert_eq!(&out[..prefix_len], &src[..prefix_len]);
