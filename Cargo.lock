@@ -213,6 +213,7 @@ checksum = "5e5032e24019045c762d3c0f28f5b6b8bbf38563a65908389bf7978758920897"
 [[package]]
 name = "makepad-html"
 version = "1.0.0"
+source = "git+https://github.com/ZhangHanDong/makepad.git?branch=dev#17210f2121f0cd47abfc3080c0903f99b39290c7"
 dependencies = [
  "makepad-live-id",
 ]
@@ -220,6 +221,7 @@ dependencies = [
 [[package]]
 name = "makepad-live-id"
 version = "1.0.0"
+source = "git+https://github.com/ZhangHanDong/makepad.git?branch=dev#17210f2121f0cd47abfc3080c0903f99b39290c7"
 dependencies = [
  "makepad-live-id-macros",
 ]
@@ -227,6 +229,7 @@ dependencies = [
 [[package]]
 name = "makepad-live-id-macros"
 version = "1.0.0"
+source = "git+https://github.com/ZhangHanDong/makepad.git?branch=dev#17210f2121f0cd47abfc3080c0903f99b39290c7"
 dependencies = [
  "makepad-micro-proc-macro",
 ]
@@ -234,10 +237,12 @@ dependencies = [
 [[package]]
 name = "makepad-micro-proc-macro"
 version = "1.0.0"
+source = "git+https://github.com/ZhangHanDong/makepad.git?branch=dev#17210f2121f0cd47abfc3080c0903f99b39290c7"
 
 [[package]]
 name = "makepad-svg"
 version = "1.0.0"
+source = "git+https://github.com/ZhangHanDong/makepad.git?branch=dev#17210f2121f0cd47abfc3080c0903f99b39290c7"
 dependencies = [
  "makepad-html",
  "makepad-live-id",

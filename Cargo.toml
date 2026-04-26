@@ -18,7 +18,7 @@ resvg = { version = "0.46", optional = true }
 [dev-dependencies]
 # Used by tests/probe_svg.rs to round-trip rusty-mermaid output through
 # Makepad's SVG parser for diagnostics.
-makepad-svg = { path = "../robius/makepad/libs/svg" }
+makepad-svg = { git = "https://github.com/ZhangHanDong/makepad.git", branch = "dev" }
 # Sanitizer integration + pulldown round-trip tests live in `tests/sanitizer*.rs`.
 pulldown-cmark = { version = "0.13", default-features = false }
 
